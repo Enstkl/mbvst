@@ -28,7 +28,8 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir _site
-          cp index.html styles.css app.js favicon.svg _site/
+          cp index.html styles.css app.js capture-flows.js favicon.svg _site/
+          cp -r vendor _site/
           touch _site/.nojekyll
       - name: Upload site
         uses: actions/upload-pages-artifact@v3

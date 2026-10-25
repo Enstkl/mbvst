@@ -6,3 +6,5 @@ _site/
 __pycache__/
 .DS_Store
 qa-*.png
+
+qa-*.html
