@@ -49,3 +49,7 @@ Barkod üretimi: JsBarcode 3.11.6, MIT lisansı (`vendor/jsbarcode-LICENSE.txt`)
 ### Ürün eklerken kamerayla barkod okutma
 
 `#new-product` sayfasında Kameradan barkod okut düğmesi mevcut kamera okuyucusunu açar. Okunan kod, yazılmış ad/fiyat/miktar alanları korunarak forma ve etiket önizlemesine aktarılır; satış sepetine eklenmez. Kodu elle yazmak veya barkodsuz ürün için yeni iç barkod oluşturmak da mümkündür. Kayıtlı barkodla ikinci ürün oluşturulmaz. Barkoddan ürün adı/fiyat sorgulayan harici veri kaynağı yoktur. Kayıtlar halen sekme belleğindedir.
+
+## Barkodla mevcut stoğa ekleme
+
+`#documents` (Stok ekle) varsayılan olarak Barkodla ekle sekmesini açar. Kamera, klavye gibi çalışan barkod okuyucu veya numara girişiyle mevcut ürün bulunur; eklenecek miktar elle girilir. Mevcut miktar + yeni miktar önizlemesi gösterilir; onayda stok artırılır. Ürün bulunamazsa barkodu yeni ürün formuna taşımak mümkündür. Aynı sayfada Belgeden toplu ekle sekmesi mevcut fatura akışını korur. Bu işlem alış faturası veya maliyet kaydı değildir; işlem geçmişinde Stok girişi olarak görünür. Tüm kayıtlar halen açık sekmede tutulur.
