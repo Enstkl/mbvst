@@ -53,3 +53,19 @@ Barkod üretimi: JsBarcode 3.11.6, MIT lisansı (`vendor/jsbarcode-LICENSE.txt`)
 ## Barkodla mevcut stoğa ekleme
 
 `#documents` (Stok ekle) varsayılan olarak Barkodla ekle sekmesini açar. Kamera, klavye gibi çalışan barkod okuyucu veya numara girişiyle mevcut ürün bulunur; eklenecek miktar elle girilir. Mevcut miktar + yeni miktar önizlemesi gösterilir; onayda stok artırılır. Ürün bulunamazsa barkodu yeni ürün formuna taşımak mümkündür. Aynı sayfada Belgeden toplu ekle sekmesi mevcut fatura akışını korur. Bu işlem alış faturası veya maliyet kaydı değildir; işlem geçmişinde Stok girişi olarak görünür. Tüm kayıtlar halen açık sekmede tutulur.
+
+## Çalışanlar ve yetkiler (arayüz prototipi)
+
+`#team` ekranında örnek çalışan hesabı oluşturma, hazır rol seçme, hesap bazında izinleri düzenleme ve hesabı devre dışı bırakma bulunur. İşletme sahibi hesabı değiştirilemez; çalışan yöneten hesap kendi kapsamından daha geniş yetki veremez.
+
+Hazır roller:
+- Sadece satış: satış ekranı. Stok miktarı, alış maliyeti, stok değişimleri, raporlar ve çalışan yönetimi gösterilmez.
+- Stok sorumlusu: stok görüntüleme/ekleme, ürün oluşturma ve maliyetler.
+- Yönetici: satış, stok, rapor ve indirme; çalışan yönetimi kapalı.
+- Muhasebe: stok, maliyet ve raporları okuma/indirme; satış ve veri değiştirme kapalı.
+
+Üstteki Rolü dene veya hesap satırındaki Rolü dene, o kişinin arayüzüne geçer. Önizlemeyi bitir, işletme sahibine döner. Önizleme değişiminde satış sepeti temizlenir. Menü ve doğrudan sayfa rotaları izinlere göre filtrelenir; işlem ve dışa aktarma eylemleri de kontrol edilir. Maliyet görme izni olmayan stok kullanıcısının stok CSV çıktısına maliyet sütunu konmaz.
+
+**Bu bir güvenlik sınırı değildir.** Kullanıcılar, yetkiler ve ürünler tarayıcı belleğindedir; kaynak kod ve örnek veriler istemciye indirilir. Gerçek kullanıcı kaydı, parola, oturum, davet e-postası, veritabanı veya sunucu tarafı erişim kontrolü yoktur. Gerçek çalışan kullanımından önce kimlik doğrulama ve işletme/rol bazında veri denetimi sunucuda uygulanmalıdır. Hesaplar yenilemede sıfırlanır.
+
+Regresyon kontrolleri: `node tests/team-access.test.cjs`. Fiziksel cihaz ve görsel tarayıcı kontrolü bu değişiklikte yapılmadı.
