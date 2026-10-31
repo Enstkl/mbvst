@@ -59,3 +59,7 @@ Kayıtlı kişi seçme, ad yazma ve müşteri oluşturma ayrı kontroller değil
 ## F-005 — Tek alanda ürün adı ve barkod arama
 
 Satış noktası ürün adı, tam barkod ve barkodun son 4–5 hanesini aynı girişten kabul etmelidir. Tam kod eşleşmesi öncelikli olmalı; kısa kodla birden fazla ürün bulunduğunda kullanıcı seçim yapmadan sepete eklenmemelidir. Okuyucunun Enter girdisiyle hızlı satış korunmalıdır. Prototipte uygulanmıştır.
+
+### F-002 arayüz netleştirmesi — POS neti yalnızca raporlarda
+
+Satış yapan çalışan, POS seçtiğinde toplam satış fiyatından farklı ikinci bir net fiyat görmemelidir. Kesinti hesaplanıp kaydedilir; brüt, kesinti ve net tutar raporlarda görünür. Raporlara ayrıca ürün maliyeti ve POS kesintisi sonrası net satış kazancı eklenmiştir. Giderler dahil olmadığı açıkça belirtilir; maliyeti bilinmeyen kayıtlar kazanca dahil edilmez. Veritabanına taşınırken satış anındaki maliyet ve kesinti geçmişi korunmalıdır.

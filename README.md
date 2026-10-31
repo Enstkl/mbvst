@@ -125,3 +125,11 @@ Tam adı kayıtlı bir kişiyle eşleşirse dropdown yeni kart oluşturmayı ön
 Enter/arama düğmesi tek eşleşmeyi sepete ekler. Birden fazla eşleşmede otomatik ürün seçilmez; sonuçlardan biri seçilir. USB/Bluetooth okuyucular da aynı alana kod ve Enter gönderebilir. Başındaki sıfırlar korunur. Ekleme sonrası alan temizlenir; tüm eski barkod ve ayrı ürün adı girişleri kaldırılmıştır. Kamera taraması mevcut şekilde devam eder.
 
 Test: `node tests/sale-product-search.test.cjs`.
+
+## POS görünümü ve net satış kazancı
+
+Satış noktasında POS seçildiğinde kesinti/net para tutarları gösterilmez; müşteriden alınacak fiyat mevcut Toplam alanıdır. Kesinti oranı girilebilir ve kesinti hesabı satış kaydında saklanır. Satış sonrası POS özetinde de ikinci bir net fiyat gösterilmez. Brüt/POS kesinti/net ayrıntısı yalnızca raporlarda ve yetkili rapor ayrıntılarında görünür.
+
+Raporlarda Net satış kazancı = satış tutarı − satış anındaki ürün maliyeti − o satışa ait POS kesintileridir. Veresiye tahsilatının POS kesintisi ödeme dağılımına göre ilgili satışlara bir kez paylaştırılır. Filtrelenen yöntem ve dönemde maliyeti bilinen satışlar hesaplanır; bilinmeyen maliyet sıfır kabul edilmez, kaydın dışarıda kaldığı belirtilir. Sonradan ürün alış maliyetini değiştirmek eski satışın saklı maliyetini değiştirmez. Kazanç CSV ve satış ayrıntısına da eklenmiştir.
+
+Bu tutar işletmenin net kârı veya tahsil edilmiş para değildir: kira/maaş/diğer giderler dahil değildir ve veresiye satış kazancı tahsilat anlamına gelmez. Genel demo grafikler yine örnektir. Testler POS netinin satışta gizlendiğini, kuruş hesabını, negatif/sıfır/bilinmeyen maliyetleri, eski maliyetin korunmasını ve kesintinin iki kez düşülmediğini denetler.

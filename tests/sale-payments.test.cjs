@@ -28,6 +28,26 @@ run('actions["complete-sale"]()');assert.equal(run('transactions.length'),3);ass
 assert.equal(run('paymentSalesCSV().length'),4);assert(run('paymentSalesCSV().flat().includes("<Müşteri>")'));run('paymentReportFilter="credit"');assert.equal(run('paymentSalesCSV().length'),2);
 assert.equal(run('istanbulDay("2026-10-31T21:30:00Z")'),'2026-11-01');
 assert.equal(run('periodBounds("month",new Date("2026-11-01T10:00:00Z")).start'),'2026-11-01');assert.equal(run('periodBounds("week",new Date("2026-11-01T10:00:00Z")).start'),'2026-10-26');
+
+// POS net values are internal/report-only, never a second price at the sale point.
+run('paymentDraft.method="pos";paymentDraft.posRate="3.25";addCart(9)');
+assert(!run('paymentPreview()').includes('967'));assert(!run('paymentPreview()').includes('32,5'));
+run('actions["complete-sale"]()');assert(!run('paymentSaleReceipt()').includes('967'));assert(!run('paymentSaleReceipt()').includes('32,5'));
+assert.equal(run('saleNetGain(transactions[0]).costCents'),50000);assert.equal(run('saleNetGain(transactions[0]).gainCents'),46750);
+run('products[8].cost=900');assert.equal(run('saleNetGain(transactions[0]).gainCents'),46750);
+assert.equal(run('saleNetGain({amount:100,posFeeAmount:0,lines:[{qty:1,unitCost:150}]}).gainCents'),-5000);
+assert.equal(run('saleNetGain({amount:100,posFeeAmount:0,lines:[{qty:1,unitCost:0}]}).costCents'),0);
+assert.equal(run('saleNetGain({amount:100,posFeeAmount:0})'),null);
+assert.equal(run('saleNetGain({amount:100,posFeeAmount:0,lines:[{qty:1,unitCost:null}]})'),null);
+assert(run('netGainReport([{amount:100}])').includes('maliyeti bilinmediği'));
+run('paymentReportFilter="pos"');assert(run('paymentReports()').includes('Net satış kazancı'));assert(run('paymentSalesCSV()[0]').includes('Net satış kazancı (TL)'));
+// Debt repayment fees are assigned once to the originating sales, not both to sales and collections.
+run('var credits=transactions.filter(t=>t.type==="sale"&&t.paymentMethod==="credit");creditPayments.push({grossAmount:145,posFeeAmount:.75,allocations:[{saleId:credits[0].id,amountCents:14500}]})');
+assert.equal(run('saleCollectionFeeCents(credits[0])'),75);assert.equal(run('saleNetGain(credits[0]).feeCents'),75);
+run('creditPayments=[{grossAmount:3,posFeeAmount:.01,allocations:[{saleId:"A",amountCents:100},{saleId:"B",amountCents:200}]}]');
+assert.equal(run('saleCollectionFeeCents({id:"A"})+saleCollectionFeeCents({id:"B"})'),1);
+run('creditPayments=[]');
+
 run('transactions=[{type:"sale",createdAt:"2026-10-31T21:01:00Z"},{type:"sale",createdAt:"2026-10-31T20:59:00Z"}]');assert.equal(run('recordedSales("month",new Date("2026-11-01T10:00:00Z")).length'),1);
 run('previewEmployee("cashier-demo");addCart(1);paymentDraft.method="cash";actions["complete-sale"]()');assert.equal(run('transactions[0].operatorId'),'cashier-demo');assert(!node('#main').innerHTML.includes('sale-stock-results'));run('page="reports";render()');assert.equal(run('page'),'sales');
 console.log('PASS: required method, POS optional/zero/100% rates, comma decimals, exact cent rounding, credit customer validation, no stock change on invalid sale, cash/POS/credit snapshots, outstanding separated from collected, CSV method filter, Istanbul date boundaries, cashier permissions.');
