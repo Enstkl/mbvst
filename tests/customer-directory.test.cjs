@@ -13,13 +13,26 @@ assert(run('registerCreditCustomer({name:"",phone:"05000000000"}).error'));asser
 run('openCustomerForm("credit")');assert(first.node('#modal-root').innerHTML.includes('customer-registration-form'));
 assert(run('submitCustomerForm({name:"Zeynep",phone:"05000000000",note:"Müşteri notu"})'));assert.equal(run('customerDirectory.length'),1);assert.equal(run('creditCustomers()[0].original'),0);assert.equal(run('creditCustomers()[0].status'),'none');assert.equal(run('creditStatus'),'all');
 const zeynepId=run('customerDirectory[0].id');assert(storage.size>0);
-run('page="sales";paymentDraft.method="credit";paymentDraft.name="Ali";paymentDraft.phone="05000000001";render()');assert(run('saveSaleCustomer()'));assert.equal(run('customerDirectory.length'),2);assert(first.node('[data-payment-field="name"]').readOnly);assert(first.node('[data-payment-field="phone"]').readOnly);
+run('page="sales";paymentDraft.method="credit";paymentDraft.name="Ali";paymentDraft.phone="05000000001";render()');assert(run('saveSaleCustomer()'));assert.equal(run('customerDirectory.length'),2);assert.equal(first.node('[data-payment-field="name"]').readOnly,false);assert(first.node('[data-payment-field="phone"]').readOnly);
 assert(run('registerCreditCustomer({name:"Çağla",phone:"05000000002"}).customer'));
 assert.equal(run('registerCreditCustomer({name:"Başka ad",phone:"+90 (500) 000 00 00"}).existing'),true);assert.equal(run('registerCreditCustomer({name:"Başka ad",phone:"905000000000"}).customer.id'),zeynepId);assert.equal(run('customerDirectory.length'),3);assert.equal(run('customerDirectory[0].name'),'Zeynep');
-const suggestion=run('customerNameSuggestions("")');assert(suggestion.indexOf('Ali')<suggestion.indexOf('Çağla'));assert(suggestion.indexOf('Çağla')<suggestion.indexOf('Zeynep'));assert(run('savedCustomerPicker()').includes('Kayıtlı müşteri seç · A–Z'));
+const suggestion=run('customerNameSuggestions("")');assert(suggestion.indexOf('Ali')<suggestion.indexOf('Çağla'));assert(suggestion.indexOf('Çağla')<suggestion.indexOf('Zeynep'));assert(run('savedCustomerPicker()').includes('role="combobox"'));assert(!run('savedCustomerPicker()').includes('credit-customer-select'));
 run('pickSavedCustomer("")');assert.equal(run('paymentDraft.name'),'');assert.equal(first.node('[data-payment-field="phone"]').readOnly,false);
+
+// One editable name field filters, selects, and creates; no separate name/select/save UI.
+run('page="sales";paymentDraft.method="credit";render()');
+assert.equal((first.node('#main').innerHTML.match(/data-payment-field="name"/g)||[]).length,1);
+assert(!first.node('#main').innerHTML.includes('credit-customer-select'));
+assert(!first.node('#main').innerHTML.includes('data-action="new-sale-customer"'));
+run('handleCustomerNameInput("Al")');assert(run('customerComboOpen'));assert(run('customerComboOptions().includes("Ali")'));assert(!run('customerComboOptions().includes("Zeynep")'));
+run('customerComboKeydown({target:{id:"customer-name-combobox"},key:"ArrowDown",preventDefault(){}});customerComboKeydown({target:{id:"customer-name-combobox"},key:"Enter",preventDefault(){}})');assert.equal(run('paymentDraft.name'),'Ali');assert.equal(run('paymentDraft.phone'),'05000000001');assert(run('paymentDraft.customerId'));assert(!run('customerComboOpen'));
+run('handleCustomerNameInput("Yeni kişi")');assert.equal(run('paymentDraft.customerId'),'');assert.equal(run('paymentDraft.phone'),'');assert.equal(run('customerComboChoices().filter(c=>c.type==="new").length'),1);
+assert(run('beginInlineCustomer()'));assert.equal(run('paymentDraft.customerMode'),'new');assert(run('inlineCustomerDetails()').includes('Kaydet ve seç'));run('paymentDraft.phone="05000000006"');assert(run('saveSaleCustomer()'));assert.equal(run('customerDirectory.length'),4);assert.equal(run('paymentDraft.name'),'Yeni kişi');
+run('handleCustomerNameInput("Ali")');assert.equal(run('customerComboChoices().filter(c=>c.type==="new").length'),0);assert(!run('beginInlineCustomer()'));
+run('pickSavedCustomer("")');
+
 // A fresh page context shares only the persisted directory, not transient debt records.
-const second=app(storage),run2=second.run;assert.equal(run2('customerDirectory.length'),3);assert.equal(run2('customerDirectory.find(c=>c.name==="Zeynep").id'),zeynepId);assert.equal(run2('creditCustomers().filter(c=>c.status==="none").length'),3);
+const second=app(storage),run2=second.run;assert.equal(run2('customerDirectory.length'),4);assert.equal(run2('customerDirectory.find(c=>c.name==="Zeynep").id'),zeynepId);assert.equal(run2('creditCustomers().filter(c=>c.status==="none").length'),4);
 const count=run2('customerDirectory.length');run2('page="sales";addCart(1);paymentDraft={method:"credit",name:"Yeniden yazılan ad",phone:"+90 500 000 00 00",note:"Satış notu",posRate:""};actions["complete-sale"]()');assert.equal(run2('customerDirectory.length'),count);assert.equal(run2('transactions[0].customer.id'),zeynepId);assert.equal(run2('transactions[0].customer.name'),'Zeynep');assert.equal(run2('transactions[0].customer.note'),'Satış notu');
 // Matching names are not a unique identifier: different phones can belong to different people.
 assert(run2('registerCreditCustomer({name:"Ali",phone:"05000000003"}).customer'));assert.equal(run2('customerDirectory.filter(c=>c.name==="Ali").length'),2);

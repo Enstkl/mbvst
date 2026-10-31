@@ -51,3 +51,7 @@ Satış yöntemi Nakit/POS/Veresiye olarak satış anında seçilmeli. POS cihaz
 **Durum:** Prototipte müşteriler ayrı sabit kimliklerle, bu tarayıcıya özel localStorage dizininde saklanıyor. Satış noktası ve Veresiye defteri müşteri oluşturma formunu açar; kayıtlı kişiler alfabetik listelenir ve ad/telefon ile bulunur. Normalleştirilmiş telefon aynıysa ikinci kart oluşturulmaz; aynı adı taşıyan farklı kişiler yalnızca ada göre birleştirilmez.
 
 Veritabanı aşamasında işletmeye bağlı müşteri tablosu, işletme+normalleştirilmiş telefon için sunucu tekillik kontrolü ve satış/tahsilatlarda müşteri kimliği bağlantısı gereklidir. Kişi kaydı tüm yetkili cihazlar arasında ortak ve kalıcı olmalı; kayıt/arama yetkileri sunucuda denetlenmelidir. Tarayıcı dizini bu ortak veri tabanının yerine geçmez.
+
+### F-004 arayüz netleştirmesi — satış noktasında tek müşteri alanı
+
+Kayıtlı kişi seçme, ad yazma ve müşteri oluşturma ayrı kontroller değil, tek bir isim combobox bileşeni olmalıdır. Yazdıkça mevcut kişiler filtrelenir. Eşleşen kişi seçilir; kişi yoksa aynı bileşen içinde telefonla oluşturulur. Aynı telefon için yeni hesap açılmaz. Bu davranış prototipte uygulanmıştır; sunucuya taşınırken korunmalıdır.

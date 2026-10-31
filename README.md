@@ -111,3 +111,9 @@ Tekilleştirme normalleştirilmiş telefon numarasına göredir. 05xx ve +90 5xx
 Kişi kartları `stokca.mbvst.customers.v1` anahtarında sürümlü JSON olarak localStorage içinde tutulur. Sayfa yenilendiğinde korunur; tarayıcı verilerini silmek, başka tarayıcı/cihaz veya başka site adresi aynı kişi listesine erişmez. Bu bir sunucu veritabanı veya yedek değildir. Borçlar, satışlar ve tahsilatlar halen geçicidir; müşteri kartında bu finansal kayıtlar saklanmaz. Depolama kapalı/dolu/bozuksa kayıt hatası gösterilir; kaydedilemeyen yeni kişiyle satış/stok hareketi oluşturulmaz.
 
 Satış yetkisi veya tahsilat kaydetme yetkisi olan hesaplar müşteri oluşturabilir. Salt görüntüleme yetkisi olan hesap oluşturamaz. Müşteri listesi çalışan hesaplarından ayrıdır. Test: `node tests/customer-directory.test.cjs`.
+
+## Satışta birleşik müşteri alanı
+
+Veresiye seçildiğinde tek Müşteri combobox alanı görünür. Ad yazıldıkça kayıtlı kişiler alfabetik filtrelenir; tıklama veya ok/Enter tuşlarıyla seçilir. Seçimde aynı müşteri kimliği ve telefon kullanılır. Adı düzenlemek mevcut seçimi ve önceki telefonu temizler; böylece yanlış kişinin telefonuyla yeni isim kaydedilmez.
+
+Tam adı kayıtlı bir kişiyle eşleşirse dropdown yeni kart oluşturmayı önermez; mevcut kişi seçilir. Eşleşmeyen ad için dropdown içinde Yeni kişi oluştur seçeneği çıkar. Aynı bileşenin altında telefon girilip Kaydet ve seç ile kayıt yapılır; ayrı kişi seçme/ad/kaydetme blokları kaldırılmıştır. Aynı telefonla yeni kart oluşturma engeli sürer. Veresiye defterindeki bağımsız Yeni müşteri formu korunur; aynı adı taşıyan farklı kişiler gerektiğinde telefonla ayırt edilebilir.
