@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir _site
-          cp index.html styles.css team-access.css sale-payments.css credit-ledger.css app.js capture-flows.js product-entry.js team-access.js sale-payments.js credit-ledger.js favicon.svg _site/
+          cp index.html styles.css team-access.css sale-payments.css credit-ledger.css app.js capture-flows.js product-entry.js team-access.js sale-payments.js credit-ledger.js customer-directory.js favicon.svg _site/
           cp -r vendor _site/
           touch _site/.nojekyll
       - name: Upload site

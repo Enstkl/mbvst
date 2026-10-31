@@ -45,3 +45,9 @@ Satış yöntemi Nakit/POS/Veresiye olarak satış anında seçilmeli. POS cihaz
 ## F-003 — Veresiye borç defteri, kişi arama ve tahsilatlar
 
 **Durum:** Statik prototipte müşteri arama/filtreleme, kısmi-tam ödeme, FIFO borç dağıtımı, ödeme geçmişi, satışta mevcut kişi seçimi ve yetkiler eklendi. Veritabanında kalıcı müşteri/satış/tahsilat ve tahsilat dağıtım kayıtlarına taşınmalı. Tahsilat yeni satış sayılmamalı; stok değiştirmemeli. POS kesintisi borcu eksik kapatmamalı; işletmenin net tahsilatını azaltmalı. İlk satış kayıtları korunmalı, kalan borç tahsilatlardan hesaplanmalı. Borç görüntüleme ve ödeme kaydetme sunucuda ayrı yetkilerle denetlenmeli.
+
+## F-004 — Tekil müşteri kartı ve iki ekrandan kayıt
+
+**Durum:** Prototipte müşteriler ayrı sabit kimliklerle, bu tarayıcıya özel localStorage dizininde saklanıyor. Satış noktası ve Veresiye defteri müşteri oluşturma formunu açar; kayıtlı kişiler alfabetik listelenir ve ad/telefon ile bulunur. Normalleştirilmiş telefon aynıysa ikinci kart oluşturulmaz; aynı adı taşıyan farklı kişiler yalnızca ada göre birleştirilmez.
+
+Veritabanı aşamasında işletmeye bağlı müşteri tablosu, işletme+normalleştirilmiş telefon için sunucu tekillik kontrolü ve satış/tahsilatlarda müşteri kimliği bağlantısı gereklidir. Kişi kaydı tüm yetkili cihazlar arasında ortak ve kalıcı olmalı; kayıt/arama yetkileri sunucuda denetlenmelidir. Tarayıcı dizini bu ortak veri tabanının yerine geçmez.

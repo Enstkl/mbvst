@@ -61,6 +61,7 @@ setupCaptureFlows();
 setupProductEntry();
 setupSalePayments();
 setupCreditLedger();
+setupCustomerDirectory();
 setupTeamAccess();
 page=location.hash.slice(1)||'dashboard';if(!['dashboard','products','documents','sales','reports','review','new-product','labels','team','credit'].includes(page))page='dashboard';render();
 

@@ -1,9 +1,10 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path'),{webcrypto}=require('node:crypto');
+const customerStorage=new Map();
 const root=path.resolve(__dirname,'..'),nodes=new Map(),events={};
 const node=key=>{if(!nodes.has(key))nodes.set(key,{innerHTML:'',textContent:'',value:'',checked:false,hidden:false,srcObject:null,classList:{add(){},remove(){},toggle(){}},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},addEventListener(){},prepend(){}});return nodes.get(key);};
-const location={hash:'#credit'},ctx=vm.createContext({console,Intl,URL,Blob,crypto:webcrypto,setTimeout:()=>0,clearTimeout(){},location,history:{replaceState(a,b,h){location.hash=h;}},FormData:class{constructor(v){this.v=v}get(k){return this.v[k]??null}getAll(k){return this.v[k]||[]}},window:{addEventListener(){},scrollTo(){}},document:{hidden:false,querySelector:node,querySelectorAll:()=>[],createElement:()=>node('created'),addEventListener:(k,f)=>(events[k]??=[]).push(f)},navigator:{}});
+const location={hash:'#credit'},ctx=vm.createContext({console,Intl,URL,Blob,crypto:webcrypto,setTimeout:()=>0,clearTimeout(){},location,history:{replaceState(a,b,h){location.hash=h;}},FormData:class{constructor(v){this.v=v}get(k){return this.v[k]??null}getAll(k){return this.v[k]||[]}},window:{addEventListener(){},scrollTo(){}},document:{hidden:false,querySelector:node,querySelectorAll:()=>[],createElement:()=>node('created'),addEventListener:(k,f)=>(events[k]??=[]).push(f)},navigator:{},localStorage:{getItem:key=>customerStorage.get(key)??null,setItem:(key,value)=>customerStorage.set(key,value)}});
 vm.runInContext(fs.readFileSync(path.join(root,'vendor/jsbarcode.min.js'),'utf8'),ctx);ctx.JsBarcode=ctx.window.JsBarcode;
-for(const file of ['product-entry.js','team-access.js','sale-payments.js','credit-ledger.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
+for(const file of ['product-entry.js','team-access.js','sale-payments.js','credit-ledger.js','customer-directory.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx);
 assert.equal(run('page'),'credit');assert(node('#main').innerHTML.includes('Henüz veresiye kaydı yok.'));
 run('transactions=[];page="sales";addCart(1);paymentDraft={method:"credit",name:"Çağla Işık",phone:"05000000000",note:"",posRate:""};actions["complete-sale"]()');

@@ -10,7 +10,7 @@ Belge fotoğrafından stok girişi, ürün takibi ve satış analizi fikrini gö
 - Satış noktası: ZXing ile kameradan gerçek barkod okuma, barkod cihazı/elle giriş alanı, Türkçe karakter ve büyük/küçük harf toleranslı ürün adı arama, sonuçlardan sepete ekleme, örnek okutma, sepet ve satış öncesi/sonrası stok karşılaştırması. Tanınmayan barkod örnek bir ürüne bağlanabilir. USB/Bluetooth okuyucular klavye gibi kod ve Enter gönderiyorsa odaklanmış alandan kullanılabilir; özel cihaz sürücüsü entegrasyonu ve ödeme işlemi yoktur.
 - Raporlar: Excel ile açılabilen örnek CSV indirmeleri. Gerçek XLSX üretilmez.
 
-Tüm değişiklikler yalnızca sayfa belleğindedir; yenilemede sıfırlanır. Dashboard göstergeleri sabit dönem örnekleridir; oturumda yapılan işlemlerle finansal olarak yeniden hesaplanmaz. Stok toplamı ve son işlemler örnek etkileşimleri yansıtır. Sayfadaki kişi ve işletme adları örnektir.
+Ürün, satış, tahsilat ve çalışan değişiklikleri sayfa belleğindedir; yenilemede sıfırlanır. Müşteri kartları ise bu tarayıcının localStorage alanında kalıcı saklanır. Dashboard göstergeleri sabit dönem örnekleridir; oturumda yapılan işlemlerle finansal olarak yeniden hesaplanmaz. Stok toplamı ve son işlemler örnek etkileşimleri yansıtır. Sayfadaki kişi ve işletme adları örnektir.
 
 ## Yerel önizleme
 
@@ -101,3 +101,13 @@ Veresiyeleri gör ve Veresiye ödemesi kaydet ayrı izinlerdir. Yönetici ikisin
 Ödeme raporlarında kalan alacak güncellenir; dönemdeki veresiye tahsilat brüt/net tutarları ve tahsilat POS kesintisi ayrı gösterilir. Borç defteri tüm tarihlerdeki kayıtları kapsar; CSV seçili müşteri filtrelerini uygular. Gerçek para transferi yapılmaz. Veriler halen açık sekmede tutulur ve yenilemede sıfırlanır.
 
 Test: `node tests/credit-ledger.test.cjs`.
+
+## Kalıcı müşteri kartları (tarayıcıya özel)
+
+Veresiye müşterileri artık borçtan ayrı bir kişi dizininde sabit kimlikle saklanır. Satış noktasında ve Veresiye defterinde Yeni müşteri düğmesi form açar. Satış noktasındaki ad/telefon alanları Müşteriyi kaydet ile satıştan bağımsız kaydedilebilir; veresiye satış kaydedilirken de kişi kartı yoksa oluşturulur. Kayıtlı kişiler A–Z seçim listesinde ve ad yazdıkça çıkan önerilerde gösterilir. Seçilen kişinin ad/telefonu değiştirilmez; yeni kişi için seçim temizlenebilir veya yeni müşteri formu açılır.
+
+Tekilleştirme normalleştirilmiş telefon numarasına göredir. 05xx ve +90 5xx aynı numara kabul edilir; mevcut telefon için aynı kişi kimliği kullanılır, adı/notu sessizce değiştirilmez. Aynı adlı farklı telefonlar farklı kişiler olabilir; yalnızca ada bakılarak birleştirilmez. Borçsuz kişiler de defterde Borç kaydı yok durumuyla görünür.
+
+Kişi kartları `stokca.mbvst.customers.v1` anahtarında sürümlü JSON olarak localStorage içinde tutulur. Sayfa yenilendiğinde korunur; tarayıcı verilerini silmek, başka tarayıcı/cihaz veya başka site adresi aynı kişi listesine erişmez. Bu bir sunucu veritabanı veya yedek değildir. Borçlar, satışlar ve tahsilatlar halen geçicidir; müşteri kartında bu finansal kayıtlar saklanmaz. Depolama kapalı/dolu/bozuksa kayıt hatası gösterilir; kaydedilemeyen yeni kişiyle satış/stok hareketi oluşturulmaz.
+
+Satış yetkisi veya tahsilat kaydetme yetkisi olan hesaplar müşteri oluşturabilir. Salt görüntüleme yetkisi olan hesap oluşturamaz. Müşteri listesi çalışan hesaplarından ayrıdır. Test: `node tests/customer-directory.test.cjs`.
