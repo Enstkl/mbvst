@@ -45,3 +45,7 @@ Barkod çözümleme kütüphanesi: `@zxing/browser` 0.1.5 (yerel `vendor/` klas�
 Ürün listesindeki Yazdır düğmeleri ve ürün ayrıntısı etiket sayfasına gider. Eklenen ürün adı veya barkoduyla satış sepetine alınabilir. Kayıtlar mevcut prototip gibi yalnızca açık sekmede tutulur; yenilemede silinir.
 
 Barkod üretimi: JsBarcode 3.11.6, MIT lisansı (`vendor/jsbarcode-LICENSE.txt`).
+
+### Ürün eklerken kamerayla barkod okutma
+
+`#new-product` sayfasında Kameradan barkod okut düğmesi mevcut kamera okuyucusunu açar. Okunan kod, yazılmış ad/fiyat/miktar alanları korunarak forma ve etiket önizlemesine aktarılır; satış sepetine eklenmez. Kodu elle yazmak veya barkodsuz ürün için yeni iç barkod oluşturmak da mümkündür. Kayıtlı barkodla ikinci ürün oluşturulmaz. Barkoddan ürün adı/fiyat sorgulayan harici veri kaynağı yoktur. Kayıtlar halen sekme belleğindedir.
