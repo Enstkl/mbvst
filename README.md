@@ -35,3 +35,13 @@ Fiş Takip uygulamasının kaynakları değiştirilmemiştir. Bu repo ayrı bir 
 Kamera yalnızca kullanıcı düğmeye bastığında ve tarayıcı izniyle açılır. HTTPS veya localhost gerekir. Kamera kapatıldığında, ekran değiştiğinde, sekme arka plana gittiğinde veya barkod okunduğunda akış durdurulur. Belge fotoğrafları tam kare olarak alınır ve bu sekmede geçici tutulur. AI ürün okuma bağlı değildir; inceleme listesi açıkça örnek olarak işaretlidir. Fiziksel kamera/okuyucu davranışı cihaz ve tarayıcıya bağlıdır.
 
 Barkod çözümleme kütüphanesi: `@zxing/browser` 0.1.5 (yerel `vendor/` klasörü, MIT lisansı).
+
+## Elle ürün ekleme ve etiket yazdırma
+
+`#new-product` sayfasında ürün adı, açıklama, kategori, adet/set/paket birimi, başlangıç miktarı ve alış/satış fiyatı girilir. Her kayıt için kriptografik rastgele kaynaktan 12 haneli, mevcut listedeki kodlarla çakışmayan işletme içi bir kod oluşturulur; CODE128 olarak çizilir. Bu kod GS1/EAN tahsisi değildir.
+
+`#labels` sayfasında barkodlu ürün seçilip 1–100 kopya yazdırılabilir. A4 (3 sütun) ve 50 × 30 mm termal etiket düzenleri vardır; fiyat isteğe bağlıdır. Yazıcı ayarları %100 ölçek ve uygun kağıt boyutuyla yapılmalıdır. Barkod numarası tekrar yazdırıldığında değişmez.
+
+Ürün listesindeki Yazdır düğmeleri ve ürün ayrıntısı etiket sayfasına gider. Eklenen ürün adı veya barkoduyla satış sepetine alınabilir. Kayıtlar mevcut prototip gibi yalnızca açık sekmede tutulur; yenilemede silinir.
+
+Barkod üretimi: JsBarcode 3.11.6, MIT lisansı (`vendor/jsbarcode-LICENSE.txt`).
