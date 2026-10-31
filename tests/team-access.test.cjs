@@ -4,7 +4,7 @@ const node=key=>{if(!nodes.has(key))nodes.set(key,{innerHTML:'',textContent:'',v
 const location={hash:'#team'};
 const ctx=vm.createContext({console,Intl,URL,Blob,crypto:webcrypto,setTimeout:()=>0,clearTimeout(){},location,history:{replaceState(a,b,hash){location.hash=hash;}},FormData:class{constructor(v){this.v=v}get(k){return this.v[k]??null}getAll(k){return this.v[k]||[]}},window:{addEventListener(){},scrollTo(){}},document:{hidden:false,querySelector:node,querySelectorAll:()=>[],createElement:()=>node('created'),addEventListener:(name,fn)=>(events[name]??=[]).push(fn)},navigator:{}});
 vm.runInContext(fs.readFileSync(path.join(root,'vendor/jsbarcode.min.js'),'utf8'),ctx);ctx.JsBarcode=ctx.window.JsBarcode;
-for(const f of ['product-entry.js','team-access.js','sale-payments.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx);
+for(const f of ['product-entry.js','team-access.js','sale-payments.js','credit-ledger.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx);
 const run=source=>vm.runInContext(source,ctx),html=()=>node('#main').innerHTML;
 assert.equal(run('page'),'team');assert(html().includes('id="employee-form"'));
 assert(run('saveEmployee({name:"Satış çalışanı",email:"test@example.com",role:"cashier",permissions:["sales"]})'));

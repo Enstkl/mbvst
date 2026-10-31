@@ -41,3 +41,7 @@ Kullanıcının istediği otomatik artış davranışı kesindir; aşağıdaki a
 **Durum:** Statik prototipte satış formu, işlem listesi, ödeme raporu ve CSV eklendi. Kalıcı kayıt veritabanıyla tamamlanmalı.
 
 Satış yöntemi Nakit/POS/Veresiye olarak satış anında seçilmeli. POS cihazına ödeme gönderen bir entegrasyon değildir. POS için kullanıcının girdiği isteğe bağlı kesinti oranı, brüt satış, hesaplanan kesinti ve net tutar satışa ait ayrı alanlarda korunmalı; sonraki oran değişiklikleri geçmiş satışları değiştirmemeli. Veresiyede müşteri adı/ünvanı, telefon ve isteğe bağlı not saklanmalı; alacak tahsilat gibi gösterilmemeli. Yöntem ve tarih bazında raporlama/dışa aktarma sağlanmalı. Gelecekte F-001 kâr hesabı uygulanırken POS kesintisi ayrıca dikkate alınmalı ve aynı kesinti iki kez düşülmemeli.
+
+## F-003 — Veresiye borç defteri, kişi arama ve tahsilatlar
+
+**Durum:** Statik prototipte müşteri arama/filtreleme, kısmi-tam ödeme, FIFO borç dağıtımı, ödeme geçmişi, satışta mevcut kişi seçimi ve yetkiler eklendi. Veritabanında kalıcı müşteri/satış/tahsilat ve tahsilat dağıtım kayıtlarına taşınmalı. Tahsilat yeni satış sayılmamalı; stok değiştirmemeli. POS kesintisi borcu eksik kapatmamalı; işletmenin net tahsilatını azaltmalı. İlk satış kayıtları korunmalı, kalan borç tahsilatlardan hesaplanmalı. Borç görüntüleme ve ödeme kaydetme sunucuda ayrı yetkilerle denetlenmeli.

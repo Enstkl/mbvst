@@ -3,7 +3,7 @@ const root=path.resolve(__dirname,'..'),nodes=new Map(),events={};
 const node=key=>{if(!nodes.has(key))nodes.set(key,{innerHTML:'',textContent:'',value:'',checked:false,srcObject:null,hidden:false,classList:{add(){},remove(){},toggle(){}},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},addEventListener(){},prepend(){}});return nodes.get(key);};
 const location={hash:'#sales'},ctx=vm.createContext({console,Intl,URL,Blob,crypto:webcrypto,setTimeout:()=>0,clearTimeout(){},location,history:{replaceState(a,b,h){location.hash=h;}},FormData:class{constructor(v){this.v=v}get(k){return this.v[k]??null}getAll(k){return this.v[k]||[]}},window:{addEventListener(){},scrollTo(){}},document:{hidden:false,querySelector:node,querySelectorAll:()=>[],createElement:()=>node('created'),addEventListener:(k,f)=>(events[k]??=[]).push(f)},navigator:{}});
 vm.runInContext(fs.readFileSync(path.join(root,'vendor/jsbarcode.min.js'),'utf8'),ctx);ctx.JsBarcode=ctx.window.JsBarcode;
-for(const file of ['product-entry.js','team-access.js','sale-payments.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
+for(const file of ['product-entry.js','team-access.js','sale-payments.js','credit-ledger.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx);
 assert(node('#main').innerHTML.includes('Satış nasıl yapıldı?'));assert(run('calculatePayment(100000,{method:""}).error'));
 assert.equal(run('calculatePayment(100000,{method:"pos",posRate:"3,25"}).feeCents'),3250);

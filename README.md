@@ -80,10 +80,24 @@ Satış noktasında satış tamamlanmadan Nakit/POS/Veresiye seçilir. Bu özell
 
 - Nakit: tutar nakit tahsilat kaydı olarak saklanır.
 - POS: isteğe bağlı 0–100% kesinti girilir. Virgül veya nokta kabul edilir. Kesinti brüt satıştan kuruş bazında hesaplanır; brüt, oran, kesinti ve net satış anında ayrı saklanır. Oran girilmediyse net brüt kabul edilir ve raporda bu varsayım belirtilir.
-- Veresiye: müşteri adı/ünvanı ve telefon zorunlu, not isteğe bağlıdır. Brüt tutar alacak olarak kaydedilir, tahsilat sıfırdır. Borç tahsilatı/kapatma henüz eklenmedi.
+- Veresiye: müşteri adı/ünvanı ve telefon zorunlu, not isteğe bağlıdır. Brüt tutar alacak olarak kaydedilir, tahsilat sıfırdır. Borç tahsilatı/kapatma Veresiye defteri sayfasında yapılır.
 
 Son işlemlerde yöntem rozeti; raporlarda nakit toplamı, POS brüt/kesinti/net tutarları ve açık veresiye alanı vardır. Rapor dönemi Europe/Istanbul takvimine göre filtrelenir. Ödeme yöntemi filtresi ve CSV aynı kayıtları kullanır. Veresiye kişi bilgileri ilgili satır ve satış ayrıntısında görünür. Çalışan kimliği ve satış tarihi de kaydedilir.
 
 Ödeme raporu sekmede gerçekten kayıtlı işlemlerden hesaplanır; genel demo grafikler ve göstergeler halen örnektir. İki başlangıç demo satışı açık Nakit/POS metaverisiyle hazırlanmıştır. Satış yöntemi/müşteri bilgileri rol önizlemesi değişince formdan temizlenir. Yetkisiz çalışan raporlara ve CSV çıktısına erişemez. Tüm veriler halen sekme belleğindedir.
 
 Testler: `node tests/sale-payments.test.cjs` ve `node tests/team-access.test.cjs`.
+
+## Veresiye defteri ve ödeme kaydı
+
+`#credit` sayfasında müşteri adı/ünvanı veya telefonla arama, borcu olan/kısmen ödenen/tamamen ödenen/tüm kişiler filtresi ve borç/ad/tarih sıralaması bulunur. Müşteri bazında toplam borç, ödenen ve kalan tutarlar gösterilir. Ayrıntıda veresiye satışları ve ödeme geçmişi vardır.
+
+Nakit veya POS ile alınmış kısmi/tam ödeme kaydedilebilir. Ödeme en eski açık satıştan başlayarak dağıtılır. Sıfır/negatif/hatalı tutar ve kalan borcu aşan ödeme reddedilir. POS kesintisi varsa borç brüt ödeme kadar azalır; kesinti işletmenin net tahsilatından düşer. Ödemeler ayrı defterde ve işlem geçmişinde tahsilat olarak tutulur; yeni satış veya stok hareketi yaratılmaz. İlk veresiye satışının tutarı/müşteri bilgisi korunur; açık bakiye ödeme kayıtlarından hesaplanır.
+
+Satış noktasında Veresiye seçilince kayıtlı kişi ad/telefonla aranıp form alanlarına aktarılabilir. Müşteriler bu prototipte telefon numarasıyla gruplanır; Türkiye için +90 ve baştaki 0 gösterimleri eşleştirilir. Aynı adlı farklı telefonlar ayrı tutulur. Veritabanı aşamasında kalıcı müşteri kimliği kullanılmalıdır.
+
+Veresiyeleri gör ve Veresiye ödemesi kaydet ayrı izinlerdir. Yönetici ikisine de, Muhasebe yalnızca görüntülemeye sahiptir. Sadece satış rolü yeni satışta kişi seçebilir ama borç bakiyelerini göremez veya tahsilat kaydedemez. İsteğe bağlı olarak bu yetkiler ayrıca verilebilir.
+
+Ödeme raporlarında kalan alacak güncellenir; dönemdeki veresiye tahsilat brüt/net tutarları ve tahsilat POS kesintisi ayrı gösterilir. Borç defteri tüm tarihlerdeki kayıtları kapsar; CSV seçili müşteri filtrelerini uygular. Gerçek para transferi yapılmaz. Veriler halen açık sekmede tutulur ve yenilemede sıfırlanır.
+
+Test: `node tests/credit-ledger.test.cjs`.
