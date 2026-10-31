@@ -4,7 +4,7 @@ const node=key=>{if(!nodes.has(key))nodes.set(key,{innerHTML:'',textContent:'',v
 const location={hash:'#team'};
 const ctx=vm.createContext({console,Intl,URL,Blob,crypto:webcrypto,setTimeout:()=>0,clearTimeout(){},location,history:{replaceState(a,b,hash){location.hash=hash;}},FormData:class{constructor(v){this.v=v}get(k){return this.v[k]??null}getAll(k){return this.v[k]||[]}},window:{addEventListener(){},scrollTo(){}},document:{hidden:false,querySelector:node,querySelectorAll:()=>[],createElement:()=>node('created'),addEventListener:(name,fn)=>(events[name]??=[]).push(fn)},navigator:{}});
 vm.runInContext(fs.readFileSync(path.join(root,'vendor/jsbarcode.min.js'),'utf8'),ctx);ctx.JsBarcode=ctx.window.JsBarcode;
-for(const f of ['product-entry.js','team-access.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx);
+for(const f of ['product-entry.js','team-access.js','sale-payments.js','capture-flows.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),ctx);
 const run=source=>vm.runInContext(source,ctx),html=()=>node('#main').innerHTML;
 assert.equal(run('page'),'team');assert(html().includes('id="employee-form"'));
 assert(run('saveEmployee({name:"Satış çalışanı",email:"test@example.com",role:"cashier",permissions:["sales"]})'));
@@ -16,11 +16,11 @@ assert.equal(run('page'),'sales');assert(!node('#navigation').innerHTML.includes
 assert(!html().includes('84 set'));assert(!html().includes('cart-stock-preview'));assert(!html().includes('set stokta'));assert(!html().includes('Mevcut stok'));assert(!html().includes('Alış maliyeti'));
 run('saleProductQuery="bardak"');assert(!run('saleSearchResults()').includes('stokta'));
 const before=run('products[0].stock');run('handleBarcodeText(products[0].barcode,"manual")');assert.equal(run('cart[0].id'),1);assert(!html().includes('Mevcut stok'));assert(!html().includes('cart-stock-preview'));
-run('actions["complete-sale"]()');assert.equal(run('products[0].stock'),before-1);assert(!html().includes('sale-stock-results'));assert(html().includes('Satış kaydedildi.'));
+run('paymentDraft.method="cash";actions["complete-sale"]()');assert.equal(run('products[0].stock'),before-1);assert(!html().includes('sale-stock-results'));assert(html().includes('Satış kaydedildi.'));
 for(const route of ['dashboard','products','documents','review','new-product','labels','reports','team']){run(`page=${JSON.stringify(route)};render()`);assert.equal(run('page'),'sales');assert(!html().includes('employee-form'));}
 const count=run('products.length');assert(!run('saveManualProduct({})'));assert(!run('increaseStockFromBarcode({})'));assert.equal(run('products.length'),count);assert(!run('can("export")'));assert(!run('actionAllowed("export-documents")'));
 run('previewEmployee("owner");previewEmployee("stock-demo")');assert.equal(run('page'),'documents');assert(!run('can("sales")'));assert(!run('can("reports")'));assert(!run('can("staffManage")'));
-run('page="sales";render()');assert.equal(run('page'),'documents');run('actions["complete-sale"]()');assert.equal(run('products[0].stock'),before-1);
+run('page="sales";render()');assert.equal(run('page'),'documents');run('paymentDraft.method="cash";actions["complete-sale"]()');assert.equal(run('products[0].stock'),before-1);
 run('previewEmployee("owner")');assert(run('saveEmployee({name:"Özel",email:"custom@example.com",role:"cashier",permissions:["stockView","export"]})'));
 run('previewEmployee(employees.at(-1).id)');assert(run('can("stockView")'));assert(!run('can("costs")'));assert(!run('actionAllowed("export-documents")'));assert(!run('actionAllowed("export-sales")'));assert(run('actionAllowed("export-stock")'));assert(!html().includes('ALIŞ MALİYETİ'));
 run('previewEmployee("owner")');assert.equal(run('page'),'team');run('editingEmployeeId="owner"');assert(!run('saveEmployee({name:"Sahip",email:"owner@example.com",role:"cashier",permissions:["sales"]})'));run('editingEmployeeId=null');

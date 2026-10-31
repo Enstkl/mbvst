@@ -35,3 +35,9 @@ Kullanıcının istediği otomatik artış davranışı kesindir; aşağıdaki a
 - Yuvarlama, elle belirlenen fiyatın otomatik kuraldan önceliği ve mevcut stokların fiyatlandırılması nasıl yönetilecek?
 
 Örnek (yalnızca maliyet üzerine ekleme seçilirse): maliyet 100 TL ve oran %30 iken satış fiyatı 130 TL olur. Esas alınan maliyet 120 TL'ye yükseldiğinde yeni satış fiyatı 156 TL olur. Bu örnek, henüz seçilmemiş hesaplama ayrıntılarını kesinleştirmez.
+
+## F-002 — Satış yöntemi, POS kesintisi ve veresiye
+
+**Durum:** Statik prototipte satış formu, işlem listesi, ödeme raporu ve CSV eklendi. Kalıcı kayıt veritabanıyla tamamlanmalı.
+
+Satış yöntemi Nakit/POS/Veresiye olarak satış anında seçilmeli. POS cihazına ödeme gönderen bir entegrasyon değildir. POS için kullanıcının girdiği isteğe bağlı kesinti oranı, brüt satış, hesaplanan kesinti ve net tutar satışa ait ayrı alanlarda korunmalı; sonraki oran değişiklikleri geçmiş satışları değiştirmemeli. Veresiyede müşteri adı/ünvanı, telefon ve isteğe bağlı not saklanmalı; alacak tahsilat gibi gösterilmemeli. Yöntem ve tarih bazında raporlama/dışa aktarma sağlanmalı. Gelecekte F-001 kâr hesabı uygulanırken POS kesintisi ayrıca dikkate alınmalı ve aynı kesinti iki kez düşülmemeli.

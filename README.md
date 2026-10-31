@@ -73,3 +73,17 @@ Regresyon kontrolleri: `node tests/team-access.test.cjs`. Fiziksel cihaz ve gör
 ## Gelecek geliştirmeler
 
 Veritabanı aşamasında uygulanacak önemli özellikler [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) dosyasında tutulur. Özellikle **F-001: alış fiyatı geçmişi, raporlama ve maliyet artınca kullanıcının belirlediği orana göre otomatik satış fiyatı güncelleme** unutulmamalıdır. Bu özellik mevcut prototipte henüz uygulanmış değildir.
+
+## Nakit, POS ve veresiye satış kaydı
+
+Satış noktasında satış tamamlanmadan Nakit/POS/Veresiye seçilir. Bu özellik ödeme almaz, POS cihazına bağlanmaz; dışarıda yapılmış satışın yöntemini kaydeder.
+
+- Nakit: tutar nakit tahsilat kaydı olarak saklanır.
+- POS: isteğe bağlı 0–100% kesinti girilir. Virgül veya nokta kabul edilir. Kesinti brüt satıştan kuruş bazında hesaplanır; brüt, oran, kesinti ve net satış anında ayrı saklanır. Oran girilmediyse net brüt kabul edilir ve raporda bu varsayım belirtilir.
+- Veresiye: müşteri adı/ünvanı ve telefon zorunlu, not isteğe bağlıdır. Brüt tutar alacak olarak kaydedilir, tahsilat sıfırdır. Borç tahsilatı/kapatma henüz eklenmedi.
+
+Son işlemlerde yöntem rozeti; raporlarda nakit toplamı, POS brüt/kesinti/net tutarları ve açık veresiye alanı vardır. Rapor dönemi Europe/Istanbul takvimine göre filtrelenir. Ödeme yöntemi filtresi ve CSV aynı kayıtları kullanır. Veresiye kişi bilgileri ilgili satır ve satış ayrıntısında görünür. Çalışan kimliği ve satış tarihi de kaydedilir.
+
+Ödeme raporu sekmede gerçekten kayıtlı işlemlerden hesaplanır; genel demo grafikler ve göstergeler halen örnektir. İki başlangıç demo satışı açık Nakit/POS metaverisiyle hazırlanmıştır. Satış yöntemi/müşteri bilgileri rol önizlemesi değişince formdan temizlenir. Yetkisiz çalışan raporlara ve CSV çıktısına erişemez. Tüm veriler halen sekme belleğindedir.
+
+Testler: `node tests/sale-payments.test.cjs` ve `node tests/team-access.test.cjs`.
