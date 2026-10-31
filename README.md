@@ -69,3 +69,7 @@ Hazır roller:
 **Bu bir güvenlik sınırı değildir.** Kullanıcılar, yetkiler ve ürünler tarayıcı belleğindedir; kaynak kod ve örnek veriler istemciye indirilir. Gerçek kullanıcı kaydı, parola, oturum, davet e-postası, veritabanı veya sunucu tarafı erişim kontrolü yoktur. Gerçek çalışan kullanımından önce kimlik doğrulama ve işletme/rol bazında veri denetimi sunucuda uygulanmalıdır. Hesaplar yenilemede sıfırlanır.
 
 Regresyon kontrolleri: `node tests/team-access.test.cjs`. Fiziksel cihaz ve görsel tarayıcı kontrolü bu değişiklikte yapılmadı.
+
+## Gelecek geliştirmeler
+
+Veritabanı aşamasında uygulanacak önemli özellikler [PRODUCT_REQUIREMENTS.md](PRODUCT_REQUIREMENTS.md) dosyasında tutulur. Özellikle **F-001: alış fiyatı geçmişi, raporlama ve maliyet artınca kullanıcının belirlediği orana göre otomatik satış fiyatı güncelleme** unutulmamalıdır. Bu özellik mevcut prototipte henüz uygulanmış değildir.
