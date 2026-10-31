@@ -117,3 +117,11 @@ Satış yetkisi veya tahsilat kaydetme yetkisi olan hesaplar müşteri oluştura
 Veresiye seçildiğinde tek Müşteri combobox alanı görünür. Ad yazıldıkça kayıtlı kişiler alfabetik filtrelenir; tıklama veya ok/Enter tuşlarıyla seçilir. Seçimde aynı müşteri kimliği ve telefon kullanılır. Adı düzenlemek mevcut seçimi ve önceki telefonu temizler; böylece yanlış kişinin telefonuyla yeni isim kaydedilmez.
 
 Tam adı kayıtlı bir kişiyle eşleşirse dropdown yeni kart oluşturmayı önermez; mevcut kişi seçilir. Eşleşmeyen ad için dropdown içinde Yeni kişi oluştur seçeneği çıkar. Aynı bileşenin altında telefon girilip Kaydet ve seç ile kayıt yapılır; ayrı kişi seçme/ad/kaydetme blokları kaldırılmıştır. Aynı telefonla yeni kart oluşturma engeli sürer. Veresiye defterindeki bağımsız Yeni müşteri formu korunur; aynı adı taşıyan farklı kişiler gerektiğinde telefonla ayırt edilebilir.
+
+## Satışta tek ürün arama alanı
+
+Ürün adı ve barkod için tek form vardır: Ürün adı veya barkod. Türkçe harf toleranslı ad araması, tam barkod (sayısal veya harfli) ve en az 4 rakamdan oluşan barkod sonu araması desteklenir. Örneğin son 4 ya da 5 hane yazıldıkça eşleşen ürünler listelenir. Tam barkod eşleşmesi diğer sonuçlardan önceliklidir.
+
+Enter/arama düğmesi tek eşleşmeyi sepete ekler. Birden fazla eşleşmede otomatik ürün seçilmez; sonuçlardan biri seçilir. USB/Bluetooth okuyucular da aynı alana kod ve Enter gönderebilir. Başındaki sıfırlar korunur. Ekleme sonrası alan temizlenir; tüm eski barkod ve ayrı ürün adı girişleri kaldırılmıştır. Kamera taraması mevcut şekilde devam eder.
+
+Test: `node tests/sale-product-search.test.cjs`.

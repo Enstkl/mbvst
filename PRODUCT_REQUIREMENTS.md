@@ -55,3 +55,7 @@ Veritabanı aşamasında işletmeye bağlı müşteri tablosu, işletme+normalle
 ### F-004 arayüz netleştirmesi — satış noktasında tek müşteri alanı
 
 Kayıtlı kişi seçme, ad yazma ve müşteri oluşturma ayrı kontroller değil, tek bir isim combobox bileşeni olmalıdır. Yazdıkça mevcut kişiler filtrelenir. Eşleşen kişi seçilir; kişi yoksa aynı bileşen içinde telefonla oluşturulur. Aynı telefon için yeni hesap açılmaz. Bu davranış prototipte uygulanmıştır; sunucuya taşınırken korunmalıdır.
+
+## F-005 — Tek alanda ürün adı ve barkod arama
+
+Satış noktası ürün adı, tam barkod ve barkodun son 4–5 hanesini aynı girişten kabul etmelidir. Tam kod eşleşmesi öncelikli olmalı; kısa kodla birden fazla ürün bulunduğunda kullanıcı seçim yapmadan sepete eklenmemelidir. Okuyucunun Enter girdisiyle hızlı satış korunmalıdır. Prototipte uygulanmıştır.
